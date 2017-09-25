@@ -15,13 +15,12 @@ class Calculator {
 
 private:
     string data;
+    bool parse();
+
 
 public:
     Calculator();
     double evaluate(string data);
-
-private:
-    bool validate();
 
 };
 
