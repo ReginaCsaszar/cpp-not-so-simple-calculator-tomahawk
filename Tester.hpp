@@ -8,22 +8,22 @@ public:
     {
         failedTests = 0;
         // Level 0
-/*        TestAddition();
+        TestAddition();
         TestSubtraction();
         TestMultiplication();
         TestDivision();
         TestFormulaWithSpaces();
-*/
+
         //Level 1
         TestRoot();
-/*        TestPow();
+        TestPow();
         TestFractional();
         TestComplicatedFormula_noBrackets();
         TestComplicatedFormula_root();
         TestComplicatedFormula_rootAndPower();
         TestErroneousFormula_rootTypoNoBrackets();
 
-
+/*
         // Boss fight
         TestComplicatedFormula_brackets();
         TestComplicatedFormula_bracketsBeforeRoot();
@@ -79,6 +79,8 @@ private:
         checkResult(1000, result);
     }
 
+//LVL#1
+
     void TestRoot()
     {
         Calculator c;
@@ -121,6 +123,8 @@ private:
         double result = c.evaluate("12+2*2rwot25+10^4+6-3");
         checkResult(0, result);
     }
+
+//BOSSFIGHT!
 
     void TestComplicatedFormula_brackets()
     {

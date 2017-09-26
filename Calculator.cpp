@@ -18,41 +18,53 @@ double Calculator::evaluate(string data) {
 bool Calculator::parse() {
     string digit = "";
     string op = "";
-    cout<<"String to parse: "<<data<<endl;
+    //cout<<"String to parse: "<<data<<endl;
     for(char c : data) {
 
-        if (c == ' ') { continue;}
+        if (c == ' ') { continue; }
 
         if (std::isdigit(c)) {
             digit += c;
-            if (op == "-" || op == "+") {
-                Evaluables.push_back(Operator(op, 1));
-                            }
-            else if (op == "*" || op == "/") {
-                Evaluables.push_back(Operator(op, 2));
+            if (op != "") {
+                if (op == "-" || op == "+") {
+                    Evaluables.push_back(Operator(op, 1));
+                } else if (op == "*" || op == "/") {
+                    Evaluables.push_back(Operator(op, 2));
+                } else if (op == "^" || op == "root") {
+                    Evaluables.push_back(Operator(op, 3));
+                } else {
+                    cout<<"Invalid operator/character!"<<endl;
+                    return false;
+                }
+                op = "";
             }
-            else if (op == "^" || op == "root") {
-                Evaluables.push_back(Operator(op, 3));
-            }
-            op = "";
-        }
-
-        else {
-            if (digit !="" ) {
+        } else {
+            op += c;
+            if (c == '.') {
+                if ((digit != "")&&(digit.find('.') == std::string::npos)) {
+                    digit += c;
+                    op = "";
+                }
+            } else if (digit != "") {
                 Evaluables.push_back(Num(digit));
                 digit = "";
             }
-            op += c;
-            }
         }
+    }
 
     if (digit !="" ) {
         Evaluables.push_back(Num(digit));
     }
-    cout<<Evaluables.size()<<" elements\n";
+
+    if (op !="" ) {
+        cout<<"Operator/character at the end!\n";
+        return false;
+    }
+
+    /*cout<<Evaluables.size()<<" elements ";
     for (Evaluable eval : Evaluables) {
         cout<<eval.getSign();
     }
-    cout<<endl;
+    cout<<endl;*/
     return true;
 }
