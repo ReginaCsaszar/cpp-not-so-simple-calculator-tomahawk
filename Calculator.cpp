@@ -11,9 +11,67 @@ double Calculator::evaluate(string data) {
     this->data = data;
     double result = 0;
 
-    Calculator::parse();
+    if (Calculator::parse()) {
+
+        cout<<Evaluables.size()<<"\nEvaulate: ";
+        for (Evaluable eval : Evaluables) {
+            cout<<eval.getSign();
+        }
+        cout<<endl;
+
+        for (int i=1; i<Evaluables.size(); i+=2) {
+            if (Evaluables[i].getOrder() == 2) {
+                Calculator::calculate(i);
+                i-=2;
+            }
+        }
+
+        cout<<endl<<Evaluables.size()<<" elements in vector after level 1:\n";
+        for (Evaluable eval : Evaluables) {
+            cout<<eval.getSign()<<", ";
+        }
+        cout<<endl;
+
+        for (int i=1; i<Evaluables.size(); i+=2) {
+            if (Evaluables[i].getOrder() == 1) {
+                Calculator::calculate(i);
+                i-=2;
+            }
+        }
+        result = Evaluables[0].getNumber();
+    }
+
+    cout<<endl<<Evaluables.size()<<" elements in vector after level 0 :\n";
+    for (Evaluable eval : Evaluables) {
+        cout<<eval.getSign()<<", ";
+    }
+    cout<<"\n\nResult: "<<result<<endl;
+
     return result;
 }
+
+void Calculator::calculate(int index) {
+    double result;
+    double firstNum = Evaluables[index-1].getNumber();
+    double secondNum = Evaluables[index+1].getNumber();
+    string sign = Evaluables[index].getSign();
+
+    cout<<"\nNow calculate: "<<firstNum<<sign<<secondNum;
+
+    if (sign == "*") { result = firstNum * secondNum; }
+    else if (sign == "/") { result = firstNum / secondNum; }
+    else if (sign == "+") { result = firstNum + secondNum; }
+    else if (sign == "-") { result = firstNum - secondNum; }
+
+    Evaluables[index-1] = Num(result);
+
+    cout<<" = "<<Evaluables[index-1].getSign()<<endl;
+
+    Evaluables.erase(Evaluables.begin()+index);
+    Evaluables.erase(Evaluables.begin()+index);
+
+    }
+
 
 bool Calculator::parse() {
     string digit = "";

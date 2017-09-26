@@ -13,7 +13,7 @@ public:
         TestMultiplication();
         TestDivision();
         TestFormulaWithSpaces();
-
+/*
         //Level 1
         TestRoot();
         TestPow();
@@ -21,7 +21,7 @@ public:
         TestComplicatedFormula_noBrackets();
         TestComplicatedFormula_root();
         TestComplicatedFormula_rootAndPower();
-        TestErroneousFormula_rootTypoNoBrackets();
+        TestErroneousFormula_rootTypoNoBrackets();*/
 
 /*
         // Boss fight
@@ -173,7 +173,7 @@ private:
         if( actual >= expected - threshold &&
             actual <= expected + threshold )
         {
-            cout << "Test ran OK." << endl;
+            cout << "Test ran OK.\n" << endl;
         }else{
             cout << "Invalid result! Expected: " << expected << " actual: " << actual << endl;
             ++failedTests;

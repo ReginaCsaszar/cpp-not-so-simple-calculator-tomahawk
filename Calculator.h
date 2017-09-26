@@ -19,12 +19,12 @@ private:
     vector<Evaluable> Evaluables;
     string data;
     bool parse();
+    void calculate(int index);
 
 
 public:
     Calculator();
     double evaluate(string data);
-
 };
 
 #endif //CPP_NOT_SO_SIMPLE_CALCULATOR_TOMAHAWK_CALCULATOR_H

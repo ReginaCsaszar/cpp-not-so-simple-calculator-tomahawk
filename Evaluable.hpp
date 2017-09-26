@@ -6,7 +6,7 @@ using namespace std;
 class Evaluable {
 
 protected:
-    double value;
+    double value; // 1 or number
     string sign; // sign or "not op"
     unsigned int order; // 0: number, 1: +-, 2: */, 3: root/powr
 
@@ -30,6 +30,12 @@ public:
     Num(string value) {
         this->value = stod(value);
         this->sign = value;
+        this->order = 0;
+    }
+
+    Num(double number) {
+        this->value = number;
+        this->sign = to_string(number);
         this->order = 0;
     }
 };
