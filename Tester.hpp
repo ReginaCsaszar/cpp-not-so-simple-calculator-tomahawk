@@ -8,12 +8,13 @@ public:
     {
         failedTests = 0;
         // Level 0
+        /*
         TestAddition();
         TestSubtraction();
         TestMultiplication();
         TestDivision();
         TestFormulaWithSpaces();
-/*
+        */
         //Level 1
         TestRoot();
         TestPow();
@@ -21,7 +22,7 @@ public:
         TestComplicatedFormula_noBrackets();
         TestComplicatedFormula_root();
         TestComplicatedFormula_rootAndPower();
-        TestErroneousFormula_rootTypoNoBrackets();*/
+        TestErroneousFormula_rootTypoNoBrackets();
 
 /*
         // Boss fight

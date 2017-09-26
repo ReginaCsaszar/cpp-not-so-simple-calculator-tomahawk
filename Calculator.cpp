@@ -1,6 +1,7 @@
 //
 // Created by jeannie on 2017.09.25..
 //
+#include <cmath>
 #include "Calculator.h"
 
 using namespace std;
@@ -18,6 +19,14 @@ double Calculator::evaluate(string data) {
             cout<<eval.getSign();
         }
         cout<<endl;
+
+        for (int i=1; i<Evaluables.size(); i+=2) {
+            if (Evaluables[i].getOrder() == 3) {
+                Calculator::calculate(i);
+                i-=2;
+            }
+        }
+
 
         for (int i=1; i<Evaluables.size(); i+=2) {
             if (Evaluables[i].getOrder() == 2) {
@@ -62,6 +71,9 @@ void Calculator::calculate(int index) {
     else if (sign == "/") { result = firstNum / secondNum; }
     else if (sign == "+") { result = firstNum + secondNum; }
     else if (sign == "-") { result = firstNum - secondNum; }
+    else if (sign == "root") { result = pow(secondNum, 1/firstNum); }
+    else if (sign == "pow" || sign == "^") { result = pow(firstNum, secondNum); }
+
 
     Evaluables[index-1] = Num(result);
 
