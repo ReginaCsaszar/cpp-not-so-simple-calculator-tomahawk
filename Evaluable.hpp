@@ -1,32 +1,46 @@
-class Evaluable {
-public:
-    double getNumber();
-    char getSign();
+#include <iostream>
+#include <string>
 
+using namespace std;
+
+class Evaluable {
+
+protected:
+    double value;
+    string sign; // sign or "not op"
+    unsigned int order; // 0: number, 1: +-, 2: */, 3: root/powr
+
+public:
+    double getNumber() {
+        return this->value;
+    }
+
+    string getSign() {
+        return this->sign;
+    }
+
+    int getOrder() {
+        return this->order;
+    }
 };
 
 class Num: public Evaluable {
 
-
 public:
-    double value;
     Num(string value) {
-        this->value=stod(value);
-        std::cout<<"Num parsed: "<<value<<endl;
-    }
-
-    double getNumber(){
-        return value;
+        this->value = stod(value);
+        this->sign = value;
+        this->order = 0;
     }
 };
 
 class Operator: public Evaluable {
-    char sign;
 
 public:
-    Operator(char sign) {
-        this->sign=sign;
-        std::cout<<"Sign parsed"<<endl;
+    Operator(string sign, int order) {
+        this->value = 1;
+        this->sign = sign;
+        this->order = order;
     }
 };
 

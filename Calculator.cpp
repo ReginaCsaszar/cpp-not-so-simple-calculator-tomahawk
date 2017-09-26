@@ -2,41 +2,57 @@
 // Created by jeannie on 2017.09.25..
 //
 #include "Calculator.h"
-#include "Evaluable.hpp"
 
 using namespace std;
 
-Calculator::Calculator() {
-    cout << "Object created" << endl;
-}
+Calculator::Calculator() {}
 
 double Calculator::evaluate(string data) {
     this->data = data;
-    if (Calculator::parse()) {
-        cout<<"Validating ok"<<endl;
-    } else {
-        cout<<"Validating not ok"<<endl;
-    }
-    return 1.0;
+    double result = 0;
+
+    Calculator::parse();
+    return result;
 }
 
 bool Calculator::parse() {
-    cout<<"Given string: "<<data<<endl;
     string digit = "";
+    string op = "";
+    cout<<"String to parse: "<<data<<endl;
     for(char c : data) {
+
+        if (c == ' ') { continue;}
+
         if (std::isdigit(c)) {
             digit += c;
-        } else {
-            if (digit !="" ) {
-                Evaluable number = Num(digit);
-                digit = "";
-                //cout<<"Number: "<<number.getNumber();
+            if (op == "-" || op == "+") {
+                Evaluables.push_back(Operator(op, 1));
+                            }
+            else if (op == "*" || op == "/") {
+                Evaluables.push_back(Operator(op, 2));
             }
-
+            else if (op == "^" || op == "root") {
+                Evaluables.push_back(Operator(op, 3));
+            }
+            op = "";
         }
-    }
+
+        else {
+            if (digit !="" ) {
+                Evaluables.push_back(Num(digit));
+                digit = "";
+            }
+            op += c;
+            }
+        }
+
     if (digit !="" ) {
-        Evaluable number = Num(digit);
+        Evaluables.push_back(Num(digit));
     }
+    cout<<Evaluables.size()<<" elements\n";
+    for (Evaluable eval : Evaluables) {
+        cout<<eval.getSign();
+    }
+    cout<<endl;
     return true;
 }

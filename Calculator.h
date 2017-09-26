@@ -8,12 +8,15 @@
 
 #include <iostream>
 #include <string>
+#include <vector>
+#include "Evaluable.hpp"
 
 using namespace std;
 
 class Calculator {
 
 private:
+    vector<Evaluable> Evaluables;
     string data;
     bool parse();
 
