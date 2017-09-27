@@ -21,6 +21,8 @@ private:
     bool parse();
     void calculate(int index);
     bool createEvaluable(string pattern);
+    int openBracketCount;
+    int closeBracketCount;
 
 
 public:

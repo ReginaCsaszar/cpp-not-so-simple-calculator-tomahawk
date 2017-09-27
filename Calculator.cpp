@@ -12,9 +12,10 @@ double Calculator::evaluate(string data) {
     this->data = data;
     double result = 0;
 
+    cout<<"string to parse: "<<data<<endl;
     if (Calculator::parse()) {
 
-        cout<<Evaluables.size()<<"\nEvaulate: ";
+        cout<<"\nEvaulate: ";
         for (Evaluable eval : Evaluables) {
             cout<<eval.getSign();
         }
@@ -27,6 +28,11 @@ double Calculator::evaluate(string data) {
             }
         }
 
+        cout<<endl<<Evaluables.size()<<" elements in vector after pow, ^, roo:\n";
+        for (Evaluable eval : Evaluables) {
+            cout<<eval.getSign()<<", ";
+        }
+        cout<<endl;
 
         for (int i=1; i<Evaluables.size(); i+=2) {
             if (Evaluables[i].getOrder() == 2) {
@@ -35,7 +41,7 @@ double Calculator::evaluate(string data) {
             }
         }
 
-        cout<<endl<<Evaluables.size()<<" elements in vector after level 1:\n";
+        cout<<endl<<Evaluables.size()<<" elements in vector after *, /:\n";
         for (Evaluable eval : Evaluables) {
             cout<<eval.getSign()<<", ";
         }
@@ -48,14 +54,15 @@ double Calculator::evaluate(string data) {
             }
         }
         result = Evaluables[0].getNumber();
-    }
 
-    cout<<endl<<Evaluables.size()<<" elements in vector after level 0 :\n";
-    for (Evaluable eval : Evaluables) {
-        cout<<eval.getSign()<<", ";
+        cout<<endl<<Evaluables.size()<<" elements in vector after +- :\n";
+        for (Evaluable eval : Evaluables) {
+            cout<<eval.getSign()<<", ";
+        }
+        cout<<"\n\nResult: "<<result<<endl;
+    } else {
+        cout<<"Error in parsing, invalid input string!!!"<<endl;
     }
-    cout<<"\n\nResult: "<<result<<endl;
-
     return result;
 }
 
@@ -88,7 +95,11 @@ void Calculator::calculate(int index) {
 bool Calculator::parse() {
     string digit = "";
     string op = "";
+
+    openBracketCount = 0;
+    closeBracketCount = 0;
     //cout<<"String to parse: "<<data<<endl;
+    if (!std::isdigit(data[0]) && data[0] != '(' && data[0] != ' ') return false;
     for(char c : data) {
 
         if (c == ' ') { continue; }
@@ -99,7 +110,35 @@ bool Calculator::parse() {
                 if (!Calculator::createEvaluable(op)) return false;
                 op = "";
             }
+        // if not digit
         } else {
+            if (c == '(') {
+                if (digit != "") {
+                    return false;
+                } else if (op!="") {
+                    if (op == ")") {
+                        return false;
+                    } else {
+                        Calculator::createEvaluable(op);
+                        op = "";
+                    }
+                }
+            } else if (c == ')') {
+                if (++closeBracketCount <= openBracketCount) {
+                    if (digit != "") {
+                        Calculator::createEvaluable(digit);
+                        digit = "";
+                    } else if (op == ")") {
+                        Calculator::createEvaluable(op);
+                        op="";
+                    }
+                } else return false;
+            }
+            if (op == ")") {
+                Calculator::createEvaluable(op);
+                op="";
+            }
+
             op += c;
             if (c == '.') {
                 if ((digit != "")&&(digit.find('.') == std::string::npos)) {
@@ -113,8 +152,15 @@ bool Calculator::parse() {
         }
     }
 
+    if (openBracketCount != closeBracketCount) return false;
+
     if (digit !="" ) {
         Calculator::createEvaluable(digit);
+    }
+
+    if (op==")") {
+        Calculator::createEvaluable(op);
+        op="";
     }
 
     if (op !="" ) {
@@ -141,6 +187,11 @@ bool Calculator::createEvaluable(string pattern) {
             Evaluables.push_back(Operator(pattern, 2));
         } else if (pattern == "^" || pattern == "root") {
             Evaluables.push_back(Operator(pattern, 3));
+        } else if (pattern == "(") {
+            ++openBracketCount;
+            Evaluables.push_back(Operator(pattern, 4));}
+        else if (pattern == ")") {
+            Evaluables.push_back(Operator(pattern, 4));
         } else {
             cout << "Invalid operator/character!" << endl;
             return false;

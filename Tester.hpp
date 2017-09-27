@@ -9,6 +9,7 @@ public:
         failedTests = 0;
         // Level 0
 
+/*
         TestAddition();
         TestSubtraction();
         TestMultiplication();
@@ -23,8 +24,7 @@ public:
         TestComplicatedFormula_root();
         TestComplicatedFormula_rootAndPower();
         TestErroneousFormula_rootTypoNoBrackets();
-
-/*
+*/
         // Boss fight
         TestComplicatedFormula_brackets();
         TestComplicatedFormula_bracketsBeforeRoot();
@@ -32,7 +32,7 @@ public:
         TestErroneousFormula_missingOpeningBracket();
         TestErroneousFormula_missingClosingBracket();
         TestErroneousFormula_missing_param();
-*/
+
         evaluateTestOutcomes();
     }
 
