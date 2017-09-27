@@ -96,16 +96,7 @@ bool Calculator::parse() {
         if (std::isdigit(c)) {
             digit += c;
             if (op != "") {
-                if (op == "-" || op == "+") {
-                    Evaluables.push_back(Operator(op, 1));
-                } else if (op == "*" || op == "/") {
-                    Evaluables.push_back(Operator(op, 2));
-                } else if (op == "^" || op == "root") {
-                    Evaluables.push_back(Operator(op, 3));
-                } else {
-                    cout<<"Invalid operator/character!"<<endl;
-                    return false;
-                }
+                if (!Calculator::createEvaluable(op)) return false;
                 op = "";
             }
         } else {
@@ -116,14 +107,14 @@ bool Calculator::parse() {
                     op = "";
                 }
             } else if (digit != "") {
-                Evaluables.push_back(Num(digit));
+                Calculator::createEvaluable(digit);
                 digit = "";
             }
         }
     }
 
     if (digit !="" ) {
-        Evaluables.push_back(Num(digit));
+        Calculator::createEvaluable(digit);
     }
 
     if (op !="" ) {
@@ -136,5 +127,24 @@ bool Calculator::parse() {
         cout<<eval.getSign();
     }
     cout<<endl;*/
+    return true;
+}
+
+bool Calculator::createEvaluable(string pattern) {
+    if (isdigit(pattern.front())) {
+        Evaluables.push_back(Num(pattern));
+    }
+    else {
+        if (pattern == "-" || pattern == "+") {
+            Evaluables.push_back(Operator(pattern, 1));
+        } else if (pattern == "*" || pattern == "/") {
+            Evaluables.push_back(Operator(pattern, 2));
+        } else if (pattern == "^" || pattern == "root") {
+            Evaluables.push_back(Operator(pattern, 3));
+        } else {
+            cout << "Invalid operator/character!" << endl;
+            return false;
+        }
+    }
     return true;
 }

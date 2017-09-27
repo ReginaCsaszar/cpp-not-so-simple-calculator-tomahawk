@@ -8,13 +8,13 @@ public:
     {
         failedTests = 0;
         // Level 0
-        /*
+
         TestAddition();
         TestSubtraction();
         TestMultiplication();
         TestDivision();
         TestFormulaWithSpaces();
-        */
+
         //Level 1
         TestRoot();
         TestPow();

@@ -20,6 +20,7 @@ private:
     string data;
     bool parse();
     void calculate(int index);
+    bool createEvaluable(string pattern);
 
 
 public:
