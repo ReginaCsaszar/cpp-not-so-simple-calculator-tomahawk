@@ -34,6 +34,7 @@ public:
         TestErroneousFormula_missing_param();
 
         //extra tests
+        Test_Pow();
         Test_DoublePointInNumber();
         Test_CloseBracketAtBegin();
         Test_OpenBracketAtEnd();
@@ -173,6 +174,12 @@ private:
         Calculator c;
         double result = c.evaluate("12+2*root25+10^4+6-3");
         checkResult(0, result);
+    }
+
+    void Test_Pow() {
+        Calculator c;
+        double result = c.evaluate("(2+3)pow(2*1)+1");
+        checkResult(26, result);
     }
 
     void Test_DoublePointInNumber() {
