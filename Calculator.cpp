@@ -22,7 +22,7 @@ double Calculator::evaluate(string data) {
                     openBracketIndices.push_back(i);
                 } else if (evaluables[i].getStrValue() == ")") {
                     int firstIndex = openBracketIndices.back()+1;
-                    Calculator::process(firstIndex, i); ////!!!!!!!!!!!!
+                    Calculator::process(firstIndex, i);
                     i = firstIndex-1;
                     evaluables.erase(evaluables.begin()+i);
                     evaluables.erase(evaluables.begin()+i+1);
@@ -42,6 +42,11 @@ double Calculator::evaluate(string data) {
         cout<<"\n\nResult: "<<result<<endl;
     } else {
         cout<<"Error in parsing, invalid input string!!!"<<endl;
+    }
+    
+    if (std::isinf(result)) {
+        cout<<"Division by zero!"<<endl;
+        result = 0;
     }
     return result;
 }
