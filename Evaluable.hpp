@@ -5,48 +5,30 @@ using namespace std;
 
 class Evaluable {
 
-protected:
-    double value; // 1 or number
-    string sign; // sign or "not op"
-    unsigned int order; // 0: number, 1: +-, 2: */, 3: root/powr
+    unsigned int order; // 0: number, 1: +-, 2: */, 3: root/pow 4: (,) TODO: enum!
+    double numValue;
+    string strValue;
 
 public:
-    double getNumber() {
-        return this->value;
-    }
 
-    string getSign() {
-        return this->sign;
-    }
+    Evaluable(string strNum)
+    : order(0), numValue(stod(strNum)), strValue(strNum) {}
+
+    Evaluable(double num)
+    : order(0), numValue(num), strValue(to_string(num) ) {}
+
+    Evaluable(string sign, unsigned int ord)
+    : order(ord), numValue(0), strValue(sign) {}
 
     int getOrder() {
-        return this->order;
+        return order;
+    }
+
+    double getNumValue() {
+        return numValue;
+    }
+
+    string getStrValue() {
+        return strValue;
     }
 };
-
-class Num: public Evaluable {
-
-public:
-    Num(string value) {
-        this->value = stod(value);
-        this->sign = value;
-        this->order = 0;
-    }
-
-    Num(double number) {
-        this->value = number;
-        this->sign = to_string(number);
-        this->order = 0;
-    }
-};
-
-class Operator: public Evaluable {
-
-public:
-    Operator(string sign, int order) {
-        this->value = 1;
-        this->sign = sign;
-        this->order = order;
-    }
-};
-

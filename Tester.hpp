@@ -1,5 +1,6 @@
 #ifndef CPP_NOT_SO_SIMPLE_CALCULATOR_TOMAHAWK_TEST_H
 #define CPP_NOT_SO_SIMPLE_CALCULATOR_TOMAHAWK_TEST_H
+
 #include "Calculator.h"
 
 class Tester {
@@ -24,7 +25,6 @@ public:
         TestComplicatedFormula_rootAndPower();
         TestErroneousFormula_rootTypoNoBrackets();
 
-/*
         // Boss fight
         TestComplicatedFormula_brackets();
         TestComplicatedFormula_bracketsBeforeRoot();
@@ -32,7 +32,14 @@ public:
         TestErroneousFormula_missingOpeningBracket();
         TestErroneousFormula_missingClosingBracket();
         TestErroneousFormula_missing_param();
-*/
+
+        //extra tests
+        Test_Pow();
+        Test_DoublePointInNumber();
+        Test_CloseBracketAtBegin();
+        Test_OpenBracketAtEnd();
+        Test_DivisonByZero();
+
         evaluateTestOutcomes();
     }
 
@@ -166,6 +173,36 @@ private:
     {
         Calculator c;
         double result = c.evaluate("12+2*root25+10^4+6-3");
+        checkResult(0, result);
+    }
+
+    void Test_Pow() {
+        Calculator c;
+        double result = c.evaluate("(2+3)pow(2*1)+1");
+        checkResult(26, result);
+    }
+
+    void Test_DoublePointInNumber() {
+        Calculator c;
+        double result = c.evaluate("1..5+0..5");
+        checkResult(0, result);
+    }
+
+    void Test_CloseBracketAtBegin() {
+        Calculator c;
+        double result = c.evaluate(")10+2");
+        checkResult(0, result);
+    }
+
+    void Test_OpenBracketAtEnd() {
+        Calculator c;
+        double result = c.evaluate("10+2(");
+        checkResult(0, result);
+    }
+
+    void Test_DivisonByZero() {
+        Calculator c;
+        double result = c.evaluate("10/0");
         checkResult(0, result);
     }
 

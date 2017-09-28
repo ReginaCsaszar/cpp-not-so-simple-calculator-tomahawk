@@ -16,11 +16,15 @@ using namespace std;
 class Calculator {
 
 private:
-    vector<Evaluable> Evaluables;
     string data;
+    int openBracketCount;
+    int closeBracketCount;
+    vector<Evaluable> evaluables;
+
     bool parse();
-    void calculate(int index);
-    bool createEvaluable(string pattern);
+    void calculate(int);
+    bool createEvaluable(string);
+    void process(int, int);
 
 
 public:

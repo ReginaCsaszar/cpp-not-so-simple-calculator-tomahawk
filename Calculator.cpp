@@ -14,58 +14,67 @@ double Calculator::evaluate(string data) {
 
     if (Calculator::parse()) {
 
-        cout<<Evaluables.size()<<"\nEvaulate: ";
-        for (Evaluable eval : Evaluables) {
-            cout<<eval.getSign();
-        }
-        cout<<endl;
-
-        for (int i=1; i<Evaluables.size(); i+=2) {
-            if (Evaluables[i].getOrder() == 3) {
-                Calculator::calculate(i);
-                i-=2;
+        if (openBracketCount > 0) {
+            vector<int> openBracketIndices;
+            for (int i = 0; i < evaluables.size(); i++) {
+                if (evaluables[i].getStrValue() == "(") {
+                    openBracketIndices.push_back(i);
+                } else if (evaluables[i].getStrValue() == ")") {
+                    int firstIndex = openBracketIndices.back()+1;
+                    Calculator::process(firstIndex, i);
+                    i = firstIndex-1;
+                    evaluables.erase(evaluables.begin()+i);
+                    evaluables.erase(evaluables.begin()+i+1);
+                    openBracketIndices.pop_back();
+                }
             }
         }
 
+        Calculator::process(0, evaluables.size()-1);
 
-        for (int i=1; i<Evaluables.size(); i+=2) {
-            if (Evaluables[i].getOrder() == 2) {
-                Calculator::calculate(i);
-                i-=2;
-            }
-        }
+        result = evaluables[0].getNumValue();
 
-        cout<<endl<<Evaluables.size()<<" elements in vector after level 1:\n";
-        for (Evaluable eval : Evaluables) {
-            cout<<eval.getSign()<<", ";
-        }
-        cout<<endl;
-
-        for (int i=1; i<Evaluables.size(); i+=2) {
-            if (Evaluables[i].getOrder() == 1) {
-                Calculator::calculate(i);
-                i-=2;
-            }
-        }
-        result = Evaluables[0].getNumber();
+    } else {
+        cout<<"Error in parsing."<<endl;
     }
 
-    cout<<endl<<Evaluables.size()<<" elements in vector after level 0 :\n";
-    for (Evaluable eval : Evaluables) {
-        cout<<eval.getSign()<<", ";
+    if (std::isinf(result)) {
+        cout<<"Division by zero!"<<endl;
+        result = 0;
     }
-    cout<<"\n\nResult: "<<result<<endl;
-
+    cout<<"Result: "<<result<<endl;
     return result;
+}
+
+void Calculator::process(int startIndex, int endIndex) {
+
+    for (int i=startIndex+1; i<endIndex; i+=2) {
+        if (evaluables[i].getOrder() == 3) {
+            Calculator::calculate(i);
+            i-=2;
+        }
+    }
+
+    for (int i=startIndex+1; i<endIndex; i+=2) {
+        if (evaluables[i].getOrder() == 2) {
+            Calculator::calculate(i);
+            i-=2;
+        }
+    }
+
+    for (int i=startIndex+1; i<endIndex; i+=2) {
+        if (evaluables[i].getOrder() == 1) {
+            Calculator::calculate(i);
+            i-=2;
+        }
+    }
 }
 
 void Calculator::calculate(int index) {
     double result;
-    double firstNum = Evaluables[index-1].getNumber();
-    double secondNum = Evaluables[index+1].getNumber();
-    string sign = Evaluables[index].getSign();
-
-    cout<<"\nNow calculate: "<<firstNum<<sign<<secondNum;
+    double firstNum = evaluables[index-1].getNumValue();
+    double secondNum = evaluables[index+1].getNumValue();
+    string sign = evaluables[index].getStrValue();
 
     if (sign == "*") { result = firstNum * secondNum; }
     else if (sign == "/") { result = firstNum / secondNum; }
@@ -74,13 +83,10 @@ void Calculator::calculate(int index) {
     else if (sign == "root") { result = pow(secondNum, 1/firstNum); }
     else if (sign == "pow" || sign == "^") { result = pow(firstNum, secondNum); }
 
+    evaluables[index-1] = Evaluable(result);
 
-    Evaluables[index-1] = Num(result);
-
-    cout<<" = "<<Evaluables[index-1].getSign()<<endl;
-
-    Evaluables.erase(Evaluables.begin()+index);
-    Evaluables.erase(Evaluables.begin()+index);
+    evaluables.erase(evaluables.begin()+index);
+    evaluables.erase(evaluables.begin()+index);
 
     }
 
@@ -88,7 +94,11 @@ void Calculator::calculate(int index) {
 bool Calculator::parse() {
     string digit = "";
     string op = "";
-    //cout<<"String to parse: "<<data<<endl;
+
+    openBracketCount = 0;
+    closeBracketCount = 0;
+    cout<<"Input string: "<<data<<endl;
+    if (!std::isdigit(data[0]) && data[0] != '(' && data[0] != ' ') return false;
     for(char c : data) {
 
         if (c == ' ') { continue; }
@@ -99,7 +109,35 @@ bool Calculator::parse() {
                 if (!Calculator::createEvaluable(op)) return false;
                 op = "";
             }
+        // if not digit
         } else {
+            if (c == '(') {
+                if (digit != "") {
+                    return false;
+                } else if (op!="") {
+                    if (op == ")") {
+                        return false;
+                    } else {
+                        Calculator::createEvaluable(op);
+                        op = "";
+                    }
+                }
+            } else if (c == ')') {
+                if (++closeBracketCount <= openBracketCount) {
+                    if (digit != "") {
+                        Calculator::createEvaluable(digit);
+                        digit = "";
+                    } else if (op == ")") {
+                        Calculator::createEvaluable(op);
+                        op="";
+                    }
+                } else return false;
+            }
+            if (op == ")") {
+                Calculator::createEvaluable(op);
+                op="";
+            }
+
             op += c;
             if (c == '.') {
                 if ((digit != "")&&(digit.find('.') == std::string::npos)) {
@@ -113,36 +151,42 @@ bool Calculator::parse() {
         }
     }
 
+    if (openBracketCount != closeBracketCount) return false;
+
     if (digit !="" ) {
         Calculator::createEvaluable(digit);
     }
 
-    if (op !="" ) {
-        cout<<"Operator/character at the end!\n";
-        return false;
+    if (op==")") {
+        Calculator::createEvaluable(op);
+        op="";
     }
 
-    /*cout<<Evaluables.size()<<" elements ";
-    for (Evaluable eval : Evaluables) {
-        cout<<eval.getSign();
+    if (op !="" ) {
+        cout<<"Invalid character at the end! ";
+        return false;
     }
-    cout<<endl;*/
     return true;
 }
 
 bool Calculator::createEvaluable(string pattern) {
     if (isdigit(pattern.front())) {
-        Evaluables.push_back(Num(pattern));
+        evaluables.push_back(Evaluable(pattern));
     }
     else {
         if (pattern == "-" || pattern == "+") {
-            Evaluables.push_back(Operator(pattern, 1));
+            evaluables.push_back(Evaluable(pattern, 1));
         } else if (pattern == "*" || pattern == "/") {
-            Evaluables.push_back(Operator(pattern, 2));
-        } else if (pattern == "^" || pattern == "root") {
-            Evaluables.push_back(Operator(pattern, 3));
+            evaluables.push_back(Evaluable(pattern, 2));
+        } else if (pattern == "^" || pattern == "root" || pattern == "pow") {
+            evaluables.push_back(Evaluable(pattern, 3));
+        } else if (pattern == "(") {
+            ++openBracketCount;
+            evaluables.push_back(Evaluable(pattern, 4));}
+        else if (pattern == ")") {
+            evaluables.push_back(Evaluable(pattern, 4));
         } else {
-            cout << "Invalid operator/character!" << endl;
+            cout << "Invalid character! ";
             return false;
         }
     }
