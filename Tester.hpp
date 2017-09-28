@@ -1,5 +1,6 @@
-#ifndef CALCULATOR_TESTER_HPP
-#define CALCULATOR_TESTER_HPP
+#ifndef CPP_NOT_SO_SIMPLE_CALCULATOR_TOMAHAWK_TEST_H
+#define CPP_NOT_SO_SIMPLE_CALCULATOR_TOMAHAWK_TEST_H
+
 #include "Calculator.h"
 
 class Tester {
@@ -8,13 +9,14 @@ public:
     {
         failedTests = 0;
         // Level 0
+
         TestAddition();
         TestSubtraction();
         TestMultiplication();
         TestDivision();
         TestFormulaWithSpaces();
-/*
-        // Level 1
+
+        //Level 1
         TestRoot();
         TestPow();
         TestFractional();
@@ -22,8 +24,7 @@ public:
         TestComplicatedFormula_root();
         TestComplicatedFormula_rootAndPower();
         TestErroneousFormula_rootTypoNoBrackets();
-*/
-/*
+
         // Boss fight
         TestComplicatedFormula_brackets();
         TestComplicatedFormula_bracketsBeforeRoot();
@@ -31,7 +32,14 @@ public:
         TestErroneousFormula_missingOpeningBracket();
         TestErroneousFormula_missingClosingBracket();
         TestErroneousFormula_missing_param();
-*/
+
+        //extra tests
+        Test_Pow();
+        Test_DoublePointInNumber();
+        Test_CloseBracketAtBegin();
+        Test_OpenBracketAtEnd();
+        Test_DivisonByZero();
+
         evaluateTestOutcomes();
     }
 
@@ -79,6 +87,8 @@ private:
         checkResult(1000, result);
     }
 
+//LVL#1
+
     void TestRoot()
     {
         Calculator c;
@@ -122,6 +132,8 @@ private:
         checkResult(0, result);
     }
 
+//BOSSFIGHT!
+
     void TestComplicatedFormula_brackets()
     {
         Calculator c;
@@ -164,12 +176,42 @@ private:
         checkResult(0, result);
     }
 
+    void Test_Pow() {
+        Calculator c;
+        double result = c.evaluate("(2+3)pow(2*1)+1");
+        checkResult(26, result);
+    }
+
+    void Test_DoublePointInNumber() {
+        Calculator c;
+        double result = c.evaluate("1..5+0..5");
+        checkResult(0, result);
+    }
+
+    void Test_CloseBracketAtBegin() {
+        Calculator c;
+        double result = c.evaluate(")10+2");
+        checkResult(0, result);
+    }
+
+    void Test_OpenBracketAtEnd() {
+        Calculator c;
+        double result = c.evaluate("10+2(");
+        checkResult(0, result);
+    }
+
+    void Test_DivisonByZero() {
+        Calculator c;
+        double result = c.evaluate("10/0");
+        checkResult(0, result);
+    }
+
     void checkResult(const double expected, const double actual, const double threshold = 0.0d)
     {
         if( actual >= expected - threshold &&
             actual <= expected + threshold )
         {
-            cout << "Test ran OK." << endl;
+            cout << "Test ran OK.\n" << endl;
         }else{
             cout << "Invalid result! Expected: " << expected << " actual: " << actual << endl;
             ++failedTests;

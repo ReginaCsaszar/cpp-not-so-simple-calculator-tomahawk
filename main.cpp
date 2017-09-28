@@ -1,6 +1,9 @@
 #include <iostream>
+#include "Tester.hpp"
+
 
 int main() {
-    std::cout << "Hello, World!" << std::endl;
+    Tester test;
+    test.run();
     return 0;
 }
