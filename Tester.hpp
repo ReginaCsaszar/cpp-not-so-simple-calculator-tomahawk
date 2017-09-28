@@ -24,15 +24,16 @@ public:
         TestComplicatedFormula_root();
         TestComplicatedFormula_rootAndPower();
         TestErroneousFormula_rootTypoNoBrackets();
-*/
+
         // Boss fight
+*/
         TestComplicatedFormula_brackets();
         TestComplicatedFormula_bracketsBeforeRoot();
         TestComplicatedFormula_bracketsAfterRoot();
-        TestErroneousFormula_missingOpeningBracket();
+/*        TestErroneousFormula_missingOpeningBracket();
         TestErroneousFormula_missingClosingBracket();
         TestErroneousFormula_missing_param();
-
+*/
         evaluateTestOutcomes();
     }
 
