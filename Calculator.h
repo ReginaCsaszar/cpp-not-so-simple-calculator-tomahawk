@@ -24,8 +24,7 @@ public:
 
 private:
     string data;
-    int openBracketCount;
-    int closeBracketCount;
+    bool isBracketInFormula;
     vector<Evaluable> evaluables;
 
     bool parse();

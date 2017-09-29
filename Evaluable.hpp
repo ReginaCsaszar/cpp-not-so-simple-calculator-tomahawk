@@ -1,5 +1,6 @@
 #include <iostream>
 #include <string>
+#include <utility>
 
 using namespace std;
 
@@ -15,11 +16,13 @@ namespace {
     string powOp = "pow";
 }
 
+enum Level { NUMBER, BASE, SECOND, THIRD, PARENTHESIS };
+
 class Evaluable {
 
 public:
 
-    int getOrder() { return order; }
+    Level getOrder() { return order; }
     double getNumValue() { return numValue; }
     string getStrValue() { return strValue; }
 
@@ -31,13 +34,13 @@ public:
 
         if (!isdigit(pattern.front())) {
             if (pattern == minusOp || pattern == plusOp) {
-                return Evaluable(pattern, 1);
+                return Evaluable(pattern, BASE);
             } else if (pattern == starOp || pattern == slashOp) {
-                return Evaluable(pattern, 2);
+                return Evaluable(pattern, SECOND);
             } else if (pattern == upOp || pattern == rootOp || pattern == powOp) {
-                return Evaluable(pattern, 3);
+                return Evaluable(pattern, THIRD);
             } else if (pattern[0] == openBracket || pattern[0] == closeBracket) {
-                return Evaluable(pattern, 4);
+                return Evaluable(pattern, PARENTHESIS);
             } else {
                 throw "Invalid evaluable! ";
             }
@@ -47,16 +50,16 @@ public:
 
 private:
 
-    unsigned int order; // 0: number, 1: +-, 2: */, 3: root/pow 4: (,) TODO: enum!
+    Level order;
     double numValue;
     string strValue;
 
-    Evaluable(string strNum)
-    : order(0), numValue(stod(strNum)), strValue(strNum) {}
+    explicit Evaluable(const string &strNum)
+    : order(NUMBER), numValue(stod(strNum)), strValue(strNum) {}
 
-    Evaluable(double num)
-    : order(0), numValue(num), strValue(to_string(num) ) {}
+    explicit Evaluable(double num)
+    : order(NUMBER), numValue(num), strValue(to_string(num) ) {}
 
-    Evaluable(string sign, unsigned int ord)
-    : order(ord), numValue(0), strValue(sign) {}
+    Evaluable(string sign, Level ord)
+    : order(ord), numValue(0), strValue(std::move(sign)) {}
 };

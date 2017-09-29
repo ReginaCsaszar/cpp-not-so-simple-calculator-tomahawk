@@ -36,8 +36,8 @@ bool Calculator::parse() {
     string digit;
     string op;
 
-    openBracketCount = 0;
-    closeBracketCount = 0;
+    int openBracketCount = 0;
+    int closeBracketCount = 0;
     cout<<"Input string: "<<data<<endl;
     if (!std::isdigit(data[0]) && data[0] != openBracket && data[0] != ' ') return false;
     for(char c : data) {
@@ -95,18 +95,21 @@ bool Calculator::parse() {
         }
     }
 
-    if (openBracketCount != closeBracketCount) { return false; }
+    if (openBracketCount > 0) {
+        if (openBracketCount != closeBracketCount) { return false; }
+        isBracketInFormula = true;
+    }
 
     if (!digit.empty()) { Calculator::factory(digit); }
 
-    if (op[0]==closeBracket) {
-        Calculator::factory(op);
-        op="";
-    }
 
     if (!op.empty()) {
-        cout<<"Invalid character at the end! ";
-        return false;
+        if (op[0]==closeBracket) {
+            Calculator::factory(op);
+        } else {
+            cout << "Invalid character at the end! ";
+            return false;
+        }
     }
     return true;
 }
@@ -129,7 +132,7 @@ bool Calculator::factory(string pattern) {
 
 void Calculator::handleBrackets() {
 
-    if (openBracketCount > 0) {
+    if (isBracketInFormula) {
         vector<int> openBracketIndices;
 
         for (int i = 0; i < evaluables.size(); i++) {
@@ -154,21 +157,21 @@ void Calculator::handleBrackets() {
 void Calculator::process(int startIndex, int endIndex) {
 
     for (int i=startIndex+1; i<endIndex; i+=2) {
-        if (evaluables[i].getOrder() == 3) {
+        if (evaluables[i].getOrder() == THIRD) {
             Calculator::calculate(i);
             i-=2;
         }
     }
 
     for (int i=startIndex+1; i<endIndex; i+=2) {
-        if (evaluables[i].getOrder() == 2) {
+        if (evaluables[i].getOrder() == SECOND) {
             Calculator::calculate(i);
             i-=2;
         }
     }
 
     for (int i=startIndex+1; i<endIndex; i+=2) {
-        if (evaluables[i].getOrder() == 1) {
+        if (evaluables[i].getOrder() == BASE) {
             Calculator::calculate(i);
             i-=2;
         }
