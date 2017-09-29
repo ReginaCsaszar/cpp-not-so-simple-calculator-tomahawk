@@ -1,0 +1,3 @@
+# NoSoSiCa
+
+Basic C++ calculator
