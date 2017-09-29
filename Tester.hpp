@@ -10,35 +10,35 @@ public:
         failedTests = 0;
         // Level 0
 
-        TestAddition();
-        TestSubtraction();
-        TestMultiplication();
-        TestDivision();
-        TestFormulaWithSpaces();
+        //TestAddition();
+        //TestSubtraction();
+        //TestMultiplication();
+        //TestDivision();
+        //TestFormulaWithSpaces();
 
         //Level 1
-        TestRoot();
-        TestPow();
-        TestFractional();
-        TestComplicatedFormula_noBrackets();
-        TestComplicatedFormula_root();
-        TestComplicatedFormula_rootAndPower();
-        TestErroneousFormula_rootTypoNoBrackets();
+        //TestRoot();
+        //TestPow();
+        //TestFractional();
+        //TestComplicatedFormula_noBrackets();
+        //TestComplicatedFormula_root();
+        //TestComplicatedFormula_rootAndPower();
+        //TestErroneousFormula_rootTypoNoBrackets();
 
         // Boss fight
-        TestComplicatedFormula_brackets();
+        //TestComplicatedFormula_brackets();
         TestComplicatedFormula_bracketsBeforeRoot();
-        TestComplicatedFormula_bracketsAfterRoot();
-        TestErroneousFormula_missingOpeningBracket();
-        TestErroneousFormula_missingClosingBracket();
-        TestErroneousFormula_missing_param();
+        //TestComplicatedFormula_bracketsAfterRoot();
+        //TestErroneousFormula_missingOpeningBracket();
+        //TestErroneousFormula_missingClosingBracket();
+        //TestErroneousFormula_missing_param();
 
         //extra tests
         Test_Pow();
-        Test_DoublePointInNumber();
-        Test_CloseBracketAtBegin();
-        Test_OpenBracketAtEnd();
-        Test_DivisonByZero();
+        //Test_DoublePointInNumber();
+        //Test_CloseBracketAtBegin();
+        //Test_OpenBracketAtEnd();
+        //Test_DivisonByZero();
 
         evaluateTestOutcomes();
     }

@@ -2,7 +2,6 @@
 // Created by jeannie on 2017.09.25..
 //
 
-
 #ifndef CPP_NOT_SO_SIMPLE_CALCULATOR_TOMAHAWK_CALCULATOR_H
 #define CPP_NOT_SO_SIMPLE_CALCULATOR_TOMAHAWK_CALCULATOR_H
 
@@ -13,7 +12,15 @@
 
 using namespace std;
 
+namespace {
+    char dot = '.';
+}
+
 class Calculator {
+
+public:
+    Calculator();
+    double evaluate(string data);
 
 private:
     string data;
@@ -22,14 +29,10 @@ private:
     vector<Evaluable> evaluables;
 
     bool parse();
-    void calculate(int);
-    bool createEvaluable(string);
+    bool factory(string);
+    void handleBrackets();
     void process(int, int);
-
-
-public:
-    Calculator();
-    double evaluate(string data);
+    void calculate(int);
 };
 
 #endif //CPP_NOT_SO_SIMPLE_CALCULATOR_TOMAHAWK_CALCULATOR_H
